@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 import "./Navigation.css";
 
-const Navigation = (props) => {
+const Navigation = ({ locations, moveUp, moveDown }) => {
   // Used for rendering
   const getClasses = (ctx, index) => {
     let classes = `material-icons ${ctx}`;
@@ -20,10 +20,10 @@ const Navigation = (props) => {
 
   // Used for rendering
   const isLast = (index) => {
-    return index === props.locations.length - 1;
+    return index === locations.length - 1;
   };
 
-  const locations = props.locations.map((location, index) => (
+  const locationsList = locations.map((location, index) => (
     <li
       key={"row" + index}
       data-testid={"location-" + index}
@@ -41,12 +41,24 @@ const Navigation = (props) => {
         </p>
       </div>
       <div>
-        <button className="icon-only small mx-0" data-testid="up-button">
-          <i className="material-icons">arrow_upward</i>
-        </button>
-        <button className="icon-only small mx-0" data-testid="down-button">
-          <i className="material-icons">arrow_downward</i>
-        </button>
+        {index !== 0 && (
+          <button
+            className="icon-only small mx-0"
+            data-testid="up-button"
+            onClick={() => moveUp(index, index - 1)}
+          >
+            <i className="material-icons">arrow_upward</i>
+          </button>
+        )}
+        {!isLast(index) && (
+          <button
+            className="icon-only small mx-0"
+            data-testid="down-button"
+            onClick={() => moveDown(index, index + 1)}
+          >
+            <i className="material-icons">arrow_downward</i>
+          </button>
+        )}
       </div>
     </li>
   ));
@@ -56,7 +68,7 @@ const Navigation = (props) => {
       <div className="card layout-row flat map-card">
         <section className="card pb-16 pr-16 flex-auto layout-column justify-content-center">
           <ul className="pl-0" data-testid="location-list">
-            {locations}
+            {locationsList}
           </ul>
         </section>
         <section className="flex-auto">
